@@ -109,12 +109,7 @@ func (rd *redisDriver) tryLock(key string) bool {
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), redisExecuteTimeout)
-	go func() {
-		for range time.After(redisExecuteTimeout) {
-			cancel()
-			break
-		}
-	}()
+	defer cancel()
 
 	var (
 		ok  bool
@@ -176,13 +171,7 @@ func (rd *redisDriver) unlock(key string) {
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), redisExecuteTimeout)
-
-	go func() {
-		for range time.After(redisExecuteTimeout) {
-			cancel()
-			break
-		}
-	}()
+	defer cancel()
 
 	if rd.client != nil {
 		_, _ = rd.client.Del(ctx, key).Result()
