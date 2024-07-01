@@ -103,8 +103,8 @@ var (
 	states               = &stateListeners{mux: &sync.Mutex{}, listeners: make(map[string]chan struct{})}
 )
 
-func (r *redisDriver) tryLock(key string) bool {
-	if r.client == nil && r.clusterClient == nil {
+func (rd *redisDriver) tryLock(key string) bool {
+	if rd.client == nil && rd.clusterClient == nil {
 		return false
 	}
 
@@ -121,12 +121,12 @@ func (r *redisDriver) tryLock(key string) bool {
 		err error
 	)
 
-	if r.client != nil {
-		ok, err = r.client.SetNX(ctx, key, lockerValue(), lockTTL).Result()
+	if rd.client != nil {
+		ok, err = rd.client.SetNX(ctx, key, lockerValue(), lockTTL).Result()
 	}
 
-	if r.clusterClient != nil {
-		ok, err = r.clusterClient.SetNX(ctx, key, lockerValue(), lockTTL).Result()
+	if rd.clusterClient != nil {
+		ok, err = rd.clusterClient.SetNX(ctx, key, lockerValue(), lockTTL).Result()
 	}
 
 	if err != nil {
@@ -146,13 +146,13 @@ func (r *redisDriver) tryLock(key string) bool {
 			for {
 				select {
 				case <-ticker.C:
-					if r.client != nil {
-						if redisOK, redisErr := r.client.Expire(innerCtx, key, lockTTL).Result(); !redisOK || redisErr != nil {
+					if rd.client != nil {
+						if redisOK, redisErr := rd.client.Expire(innerCtx, key, lockTTL).Result(); !redisOK || redisErr != nil {
 							break LOOP
 						}
 					}
-					if r.clusterClient != nil {
-						if redisOK, redisErr := r.clusterClient.Expire(innerCtx, key, lockTTL).Result(); !redisOK || redisErr != nil {
+					if rd.clusterClient != nil {
+						if redisOK, redisErr := rd.clusterClient.Expire(innerCtx, key, lockTTL).Result(); !redisOK || redisErr != nil {
 							break LOOP
 						}
 					}
@@ -170,8 +170,8 @@ func (r *redisDriver) tryLock(key string) bool {
 	return ok
 }
 
-func (r *redisDriver) unlock(key string) {
-	if r.client == nil && r.clusterClient == nil {
+func (rd *redisDriver) unlock(key string) {
+	if rd.client == nil && rd.clusterClient == nil {
 		return
 	}
 
@@ -184,12 +184,12 @@ func (r *redisDriver) unlock(key string) {
 		}
 	}()
 
-	if r.client != nil {
-		_, _ = r.client.Del(ctx, key).Result()
+	if rd.client != nil {
+		_, _ = rd.client.Del(ctx, key).Result()
 	}
 
-	if r.clusterClient != nil {
-		_, _ = r.clusterClient.Del(ctx, key).Result()
+	if rd.clusterClient != nil {
+		_, _ = rd.clusterClient.Del(ctx, key).Result()
 	}
 
 	go func() {

@@ -18,6 +18,7 @@ go get -u github.com/keepchen/schedule
 - [x] Linux Crontab Style task  
 - [x] Cancelable  
 - [x] Race detection  
+- [x] Manual call
 
 ### Examples  
 #### Interval  
@@ -45,4 +46,10 @@ time.AfterFunc(time.Minute*3, cancel)
 schedule.SetRedisProviderStandalone(...)
 
 schedule.NewJob("say hello").WithoutOverlapping().EveryMinute()
-```
+```  
+#### Manual call
+```go
+schedule.Call("say hello", false)
+
+schedule.MustCall("task not exist will be panic", true)
+```  
