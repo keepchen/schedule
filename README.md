@@ -1,5 +1,5 @@
 # Schedule  
-[![Go](https://github.com/keepchen/schedule/actions/workflows/go.yml/badge.svg)](https://github.com/keepchen/schedule/actions/workflows/go.yml)  [![CodeQL](https://github.com/keepchen/schedule/actions/workflows/codeql.yml/badge.svg)](https://github.com/keepchen/schedule/actions/workflows/codeql.yml)  [![Go Report Card](https://goreportcard.com/badge/github.com/keepchen/schedule/v3)](https://goreportcard.com/report/github.com/keepchen/go-sail/v3)  
+[![Go](https://github.com/keepchen/schedule/actions/workflows/go.yml/badge.svg)](https://github.com/keepchen/schedule/actions/workflows/go.yml)  [![CodeQL](https://github.com/keepchen/schedule/actions/workflows/codeql.yml/badge.svg)](https://github.com/keepchen/schedule/actions/workflows/codeql.yml)  [![Go Report Card](https://goreportcard.com/badge/github.com/keepchen/schedule/v3)](https://goreportcard.com/report/github.com/keepchen/schedule)  
 A distributed scheduled task tool written in Go. It was incubated and evolved from the [go-sail](https://github.com/keepchen/go-sail) framework.  
 
 ### Requirement  
@@ -27,7 +27,7 @@ schedule.NewJob("say hello").EveryMinute()
 ```  
 #### Once time  
 ```go
-schedule.NewJob("check in").RunAfter(time.Second)
+schedule.NewJob("check in").RunOnceTimeAfter(time.Second)
 ```  
 #### Linux Crontab Style  
 ```go
