@@ -44,6 +44,8 @@ time.AfterFunc(time.Minute*3, cancel)
 ```go  
 // set redis provider
 schedule.SetRedisProviderStandalone(...)
+// or
+schedule.SetRedisProviderClient(...)
 
 schedule.NewJob("say hello").WithoutOverlapping().EveryMinute()
 ```  
